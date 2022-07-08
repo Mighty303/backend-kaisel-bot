@@ -16,7 +16,7 @@ const requestFunction = (path: any) => {
 };
 
 const getStats = (req: any, res: any) => {
-
+  res.send("No empty");
 };
 
 export { getStats,  requestFunction};
