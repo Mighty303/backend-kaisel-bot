@@ -1,8 +1,7 @@
 import express from "express";
-import {getStats, requestFunction} from "../controllers/leagueController"
-const router = express()._router({mergeParams:true});
+import {getStats} from "../controllers/leagueController"
+const router = express();
 
-router.get('/stats/:id/:region/:queueId', getStats);
-
+router.get('/stats/:queueId/:region/:id', getStats);
 
 export default router;

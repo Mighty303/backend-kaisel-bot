@@ -12,6 +12,8 @@ app.use(express.static('public'));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-app.use('/api/v1/', (req, res) =>{
+app.use('/api/v1/', router);
+
+app.use('/', (req, res) =>{
     res.send("Martin's gay");
 });

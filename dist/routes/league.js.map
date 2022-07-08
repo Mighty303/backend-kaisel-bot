@@ -1,1 +1,1 @@
-{"version":3,"file":"league.js","sourceRoot":"","sources":["../../src/routes/league.ts"],"names":[],"mappings":";;;;;AAAA,sDAA8B;AAC9B,sEAAyE;AACzE,MAAM,MAAM,GAAG,IAAA,iBAAO,GAAE,CAAC,OAAO,CAAC,EAAC,WAAW,EAAC,IAAI,EAAC,CAAC,CAAC;AAErD,MAAM,CAAC,GAAG,CAAC,6BAA6B,EAAE,2BAAQ,CAAC,CAAC;AAGpD,kBAAe,MAAM,CAAC"}
+{"version":3,"file":"league.js","sourceRoot":"","sources":["../../src/routes/league.ts"],"names":[],"mappings":";;;;;AAAA,sDAA8B;AAC9B,sEAAwD;AACxD,MAAM,MAAM,GAAG,IAAA,iBAAO,GAAE,CAAC;AAEzB,MAAM,CAAC,GAAG,CAAC,6BAA6B,EAAE,2BAAQ,CAAC,CAAC;AAEpD,kBAAe,MAAM,CAAC"}

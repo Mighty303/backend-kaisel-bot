@@ -7,7 +7,7 @@
     "prebuild": "tslint -c tslint.json -p tsconfig.json --fix",
     "build": "tsc",
     "prestart": "npm run build",
-    "dev": "ts-node-dev --config --no-notify src/",
+    "dev": "ts-node-dev --no-notify src/",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
