@@ -14,16 +14,15 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getStats = void 0;
 const axios_1 = __importDefault(require("axios"));
-// Dev KEY
-const key = "RGAPI-c157ab80-bc24-4c3a-bd5b-f563e3916a98";
 const SEASON_12_BEGINS_TIMESTAMP = 1641297600;
+// Dev KEY
 // Get Summoner ID
 const getEncryptID = (sumName, region) => __awaiter(void 0, void 0, void 0, function* () {
     function sumInfo() {
         return __awaiter(this, void 0, void 0, function* () {
-            return yield axios_1.default.get(`https://${region}.api.riotgames.com/tft/summoner/v1/summoners/by-name/${sumName}`, {
+            return yield axios_1.default.get(`https://${region}.api.riotgames.com/lol/summoner/v4/summoners/by-name/${sumName}`, {
                 headers: {
-                    "X-Riot-Token": "RGAPI-c157ab80-bc24-4c3a-bd5b-f563e3916a98"
+                    "X-Riot-Token": process.env.riotAPIKey
                 },
                 params: {}
             });
@@ -31,11 +30,59 @@ const getEncryptID = (sumName, region) => __awaiter(void 0, void 0, void 0, func
     }
     return ((yield sumInfo()).data);
 });
+const getRankedStatsID = (sumID, region) => __awaiter(void 0, void 0, void 0, function* () {
+    function sumInfo() {
+        return __awaiter(this, void 0, void 0, function* () {
+            return yield axios_1.default.get(`https://${region}.api.riotgames.com/lol/league/v4/entries/by-summoner/${sumID}`, {
+                headers: {
+                    "X-Riot-Token": process.env.riotAPIKey
+                },
+                params: {}
+            });
+        });
+    }
+    return ((yield sumInfo()).data);
+});
+const findQueueData = (queuesData, queueRequested) => {
+    const data = {};
+    const dataFound = queuesData.find((queue) => {
+        if (queue.queueType === "RANKED_SOLO_5x5" && queueRequested === "Solo") {
+            return queue;
+        }
+        else if (queue.queueType === "RANKED_FLEX_SR" && queueRequested === "Flex") {
+            return queue;
+        }
+    });
+    return dataFound !== undefined ? dataFound : data;
+};
 // Return summoner id for now
 const getStats = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    getEncryptID(req.params.id, req.params.region).then((result) => {
-        res.send(result.id);
-    });
+    if (req.params.queueId !== "Solo" && req.params.queueId !== "Flex") {
+        res.json({
+            message: "Bad Request",
+        }).status(400);
+    }
+    else {
+        getEncryptID(req.params.id, req.params.region).then(({ id }) => {
+            getRankedStatsID(id, req.params.region).then((result) => {
+                const data = findQueueData(result, req.params.queueId);
+                if (Object.keys(data).length === 0) {
+                    data.rank = "Unranked";
+                    data.summonerId = id;
+                    data.summonerName = req.params.id;
+                }
+                res.set('content-location', `/api/v1/league/stats/${req.params.queueId}/${req.params.region}/${req.params.id}`).json({
+                    url: `/api/v1/league/stats/${req.params.queueId}/${req.params.region}/${req.params.id}`,
+                    data
+                }).status(201);
+            });
+        }).catch((error) => {
+            res.json({
+                message: "Not summoner found",
+                error: error.message
+            }).status(404);
+        });
+    }
 });
 exports.getStats = getStats;
 //# sourceMappingURL=leagueController.js.map
