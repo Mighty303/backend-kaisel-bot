@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import axios from "axios";
+import sqlite3, { OPEN_READWRITE } from "sqlite3";
 
 const SEASON_12_BEGINS_TIMESTAMP: number = 1641297600;
 
@@ -76,6 +77,25 @@ const findQueueData = (queuesData: object[], queueRequested: string): object => 
 }
 // Return summoner id for now
 const getStats = async (req: Request, res: Response) => {
+  // const sqlite3Handler = sqlite3.verbose();
+  // const database = new sqlite3Handler.Database("database.db", OPEN_READWRITE, (err) => {
+  //   if (err) {
+  //     console.log("Error Occurred - " + err.message);
+  //   }
+  //   else {
+  //     console.log("DataBase Connected");
+  //   }
+  // })
+
+  // database.serialize(() => {
+  //   database.each("SELECT * FROM Player", (err, row) => {
+  //     console.log(row);
+  //     console.log(err);
+  //   });
+  // })
+
+  // database.close();
+
   if (req.params.queueId !== "Solo" && req.params.queueId !== "Flex") {
     res.json({
       message: "Bad Request",
