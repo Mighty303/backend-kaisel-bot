@@ -135,10 +135,10 @@ const getMatchInfo = async (matchID: string, region: string) => {
 }
 
 const getMatchHistory = async (req: Request, res: Response) => {
-  let startTimeStamp = SEASON_12_BEGINS_TIMESTAMP;
+  const startTimeStamp = SEASON_12_BEGINS_TIMESTAMP;
   let keepLooking: boolean = true;
   let matchHistory: string[] = [];
-  let requestForMatchs = async (queue: number, startTime: number, puuid: string, index: number) => {
+  const requestForMatchs = async (queue: number, startTime: number, puuid: string, index: number) => {
     return (await axios.get(`https://americas.api.riotgames.com/lol/match/v5/matches/by-puuid/${puuid}/ids?startTime=${startTime}&queue=${queue}&start=${index}&count=${100}`, {
       headers: {
         "X-Riot-Token": process.env.riotAPIKey
@@ -149,7 +149,7 @@ const getMatchHistory = async (req: Request, res: Response) => {
   }
   getSummonerInfo(req.params.id, req.params.region).then(async ({ puuid }) => {
     while (keepLooking) {
-      let responseData: string[] = (await (requestForMatchs(440, startTimeStamp, puuid, matchHistory.length))).data;
+      const responseData: string[] = (await (requestForMatchs(440, startTimeStamp, puuid, matchHistory.length))).data;
       matchHistory = [...matchHistory, ...responseData]
       if (responseData.length < 100) {
         keepLooking = false;
